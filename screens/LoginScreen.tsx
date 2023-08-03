@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
-function LoginScreen({ navigation }) {
+type LoginScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Login"
+>;
+
+type Props = {
+  navigation: LoginScreenNavigationProp;
+};
+
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // 로그인 로직이 들어갈 자리입니다. 현재는 간단히 console.log로 로그를 찍습니다.
     console.log(`email: ${email}, password: ${password}`);
   };
 
@@ -31,7 +41,7 @@ function LoginScreen({ navigation }) {
           onChangeText={setPassword}
           value={password}
           placeholder="비밀번호"
-          secureTextEntry={true} // 비밀번호 입력 시 표시 방식을 숨김으로 설정
+          secureTextEntry={true}
         />
       </View>
 
@@ -46,7 +56,7 @@ function LoginScreen({ navigation }) {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

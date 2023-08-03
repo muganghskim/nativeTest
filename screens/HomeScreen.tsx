@@ -1,7 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
-function HomeScreen({ navigation }) {
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Coffee Shop</Text>
@@ -16,7 +24,7 @@ function HomeScreen({ navigation }) {
       {/* 추천 상품 리스트는 나중에 추가하기 */}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

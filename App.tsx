@@ -1,3 +1,4 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,9 +7,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 
-const Stack = createStackNavigator();
+type RootStackParamList = {
+  Home: undefined;
+  Login: undefined;
+  Explore: undefined;
+  Register: undefined;
+};
 
-export default function App() {
+export type { RootStackParamList };
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationContainer>
@@ -35,7 +45,7 @@ export default function App() {
       </NavigationContainer>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -43,3 +53,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   }
 });
+
+export default App;
