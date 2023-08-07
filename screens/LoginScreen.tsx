@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
+import { login } from "../recoil/atoms/auth"; // 실제 파일 경로로 수정해주세요.
+import { useSetRecoilState } from "recoil";
+import { userState, isLoggedInState } from "../recoil/atoms/auth"; // userState와 isLoggedInState를 정의한 파일 경로로 수정해주세요.
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -13,11 +16,23 @@ type Props = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ userId: "", password: "" });
+  const setUser = useSetRecoilState(userState);
+  const setIsLoggedIn = useSetRecoilState(isLoggedInState);
 
-  const handleLogin = () => {
-    console.log(`email: ${email}, password: ${password}`);
+  const handleChange = (name: any, value: String) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const loggedInUser = await login(formData);
+      setUser(loggedInUser);
+      setIsLoggedIn(true);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -28,9 +43,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         <Text>Email</Text>
         <TextInput
           style={styles.textInput}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="이메일"
+          onChangeText={(value) => handleChange("userId", value)}
+          value={formData.userId}
+          placeholder="아이디"
         />
       </View>
 
@@ -38,19 +53,19 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         <Text>Password</Text>
         <TextInput
           style={styles.textInput}
-          onChangeText={setPassword}
-          value={password}
+          value={formData.password}
+          onChangeText={(value) => handleChange("password", value)}
           placeholder="비밀번호"
           secureTextEntry={true}
         />
       </View>
 
-      <Button title="로그인" onPress={handleLogin} color="#8c6b52" />
+      <Button title="로그인" onPress={handleSubmit} color="#8c6b52" />
 
       <Text style={styles.forgotPassword}>비밀번호를 잊으셨나요?</Text>
 
       <Button
-        title="이메일로 회원가입"
+        title="아이디로 회원가입"
         onPress={() => navigation.navigate("Register")}
         color="gray"
       />
